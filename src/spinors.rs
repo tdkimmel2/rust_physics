@@ -93,4 +93,3 @@ impl Spinor{
         unit_flag_coords
     }
 }
-
