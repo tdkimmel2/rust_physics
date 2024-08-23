@@ -1,7 +1,7 @@
 use std::f64::consts::PI;
 use num::complex::Complex;
 use ndarray::{Array1, Array2, arr1, arr2};
-use libm::{cos, sin, atan2};
+use libm::{cos, acos, sin, atan2};
 
 pub struct Spinor { // W: struct is never constructed: `Spinor`
     pub s1: Complex<f64>,
@@ -11,7 +11,7 @@ pub struct Spinor { // W: struct is never constructed: `Spinor`
     _private: (),
 }
 
-impl Spinor{
+impl Spinor {
     pub fn new(s1: Complex<f64>, s2: Complex<f64>) -> Spinor {
         if s1.norm()==0. && s2.norm()==0. {
             println!("WARNING: Initializing spinor with 0 size");
@@ -43,20 +43,51 @@ impl Spinor{
         spinor_conj
     }
 
+    pub fn rotate_phase(&mut self, phase:Complex<f64>) {
+       let exp_phase = Complex::exp(phase);
+       self.s1 = self.s1*exp_phase;
+       self.s2 = self.s2*exp_phase;
+    }
+
+    pub fn get_phi(&self) -> f64 {
+        let r_y = (Complex::new(0.,1.)*(self.s1*self.s2.conj() - self.s2*self.s1.conj())).re;
+        let r_z = self.s1.norm_sqr() - self.s2.norm_sqr();
+        let phi = atan2(r_y, r_z);
+
+        phi
+    }
+
+    pub fn get_alpha(&self) -> f64 {
+        let phi = self.get_phi();
+        let mut alpha = -2.0*(self.s1-Complex::new(phi, 0.)).arg();
+        alpha = alpha%(2.*PI);
+      	if alpha.abs() < 0.00001 { alpha = 0.; }
+      	if alpha > 2.*PI - 0.0001 { alpha = 0.; }
+
+        alpha
+    }
+
+    pub fn get_theta(&self) ->f64 {
+        let r = self.s1.norm_sqr() + self.s2.norm_sqr();
+        let r_z = self.s1.norm_sqr() - self.s2.norm_sqr();
+        let theta = acos(r_z/r);
+
+        theta
+    }
+
     pub fn construct_spinor_flag(&mut self, flag_length: f64, flag_width: f64) -> Vec<(f64, f64, f64)> {
         let r = self.s1.norm_sqr() + self.s2.norm_sqr();
 		let r_x = (self.s1*self.s2.conj() + self.s2*self.s1.conj()).re;
       	let r_y = (Complex::new(0.,1.)*(self.s1*self.s2.conj() - self.s2*self.s1.conj())).re;
       	let r_z = self.s1.norm_sqr() - self.s2.norm_sqr();
-      	//let r = r_z.re;
 
-		let phi = atan2(r_y, r_z);
+        // Calculate rather than get_phi() since we already have r* vals
+		let phi = atan2(r_y, r_z); 
+        // Calculate rather than get_theta() since we already have r* vals
     	//let theta = acos(r_z/r);
+
       	if self.s1.norm() < 0.000001 { self.s1 = Complex::new(0.000001,0.); }
-      	let mut alpha = -2.0*(self.s1-Complex::new(phi, 0.)).arg();
-      	alpha = alpha%(2.*PI);
-      	if alpha.abs() < 0.00001 { alpha = 0.; }
-      	if alpha > 2.*PI - 0.0001 { alpha = 0.; }
+      	let alpha = self.get_alpha();
       	if self.s1.norm() < 0.00001 { self.s1 = Complex::new(0., 0.); }
 
         let perp_vec = arr1(&[r_z*cos(phi),r_z*sin(phi),-(r_x*r_x+r_y*r_y).sqrt()]);
