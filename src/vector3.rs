@@ -1,17 +1,39 @@
-use std::ops::{Mul, Div};
+use std::ops::{Add, Sub, Mul, Div};
 
 pub struct Vector3 {
-    pub v1: f64,
-    pub v2: f64,
-    pub v3: f64,
+    pub x: f64,
+    pub y: f64,
+    pub z: f64,
     _private: (),
+}
+
+impl Add<Vector3> for Vector3 {
+    type Output = Vector3;
+
+    fn add(self, _rhs: Vector3) -> Vector3 {
+        Vector3{ x: self.x + _rhs.x,
+        y: self.y + _rhs.y,
+        z: self.z + _rhs.z,
+        _private: () }
+    }
+}
+
+impl Sub<Vector3> for Vector3 {
+    type Output = Vector3;
+
+    fn sub(self, _rhs: Vector3) -> Vector3 {
+        Vector3{ x: self.x - _rhs.x,
+        y: self.y - _rhs.y,
+        z: self.z - _rhs.z,
+        _private: () }
+    }
 }
 
 impl Mul<f64> for Vector3 {
     type Output = Vector3;
 
     fn mul(self, _rhs: f64) -> Vector3 {
-        Vector3{ v1: self.v1*_rhs, v2: self.v2*_rhs, v3: self.v3*_rhs, _private: self._private }
+        Vector3{ x: self.x*_rhs, y: self.y*_rhs, z: self.z*_rhs, _private: self._private }
     }
 }
 
@@ -19,7 +41,7 @@ impl Mul<&Vector3> for f64 {
     type Output = Vector3;
 
     fn mul(self, _rhs: &Vector3) -> Vector3 {
-        Vector3{ v1: self*_rhs.v1, v2: self*_rhs.v2, v3: self*_rhs.v3, _private: _rhs._private }
+        Vector3{ x: self*_rhs.x, y: self*_rhs.y, z: self*_rhs.z, _private: _rhs._private }
     }
 }
 
@@ -27,32 +49,36 @@ impl Div<f64> for &Vector3 {
     type Output = Vector3;
 
     fn div(self, _rhs: f64) -> Vector3 {
-        Vector3{ v1: self.v1/_rhs, v2: self.v2/_rhs, v3: self.v3/_rhs, _private: self._private }
+        Vector3{ x: self.x/_rhs,
+        y: self.y/_rhs,
+        z: self.z/_rhs,
+        _private: self._private }
     }
 }
 
 impl Vector3 {
-    pub fn new(v1: f64, v2: f64, v3: f64)
+    pub fn new(x: f64, y: f64, z: f64)
         -> Vector3 {
-        Vector3{ v1, v2, v3, _private: () }
+        Vector3{ x, y, z, _private: () }
     }
 
-    pub fn mag(&self) -> f64 {
-        self.v1.powi(2) + self.v2.powi(2) + self.v3.powi(2) 
+    pub fn mag2(&self) -> f64 {
+        self.x.powi(2) + self.y.powi(2) + self.z.powi(2) 
     }
-    pub fn norm(&self) -> f64 {
-        (self.v1.powi(2) + self.v2.powi(2) + self.v3.powi(2)).sqrt()
+    pub fn mag(&self) -> f64 {
+        self.mag2().sqrt()
     }
     pub fn normalize(&self) -> Vector3 {
-        self/self.norm()
+        self/self.mag()
     }
+
     pub fn dot(&self, rhs: Vector3) -> f64 {
-        self.v1*rhs.v1 + self.v2+rhs.v2 + self.v3+rhs.v3
+        self.x*rhs.x + self.y+rhs.y + self.z+rhs.z
     }
     pub fn cross(&self, rhs: Vector3) -> Vector3 {
-        Vector3{ v1: self.v2*rhs.v3-self.v3*rhs.v2,
-            v2: self.v3*rhs.v1 - self.v1*rhs.v3,
-            v3: self.v1*rhs.v2 - self.v2*rhs.v1,
+        Vector3{ x: self.y*rhs.z-self.z*rhs.y,
+            y: self.z*rhs.x - self.x*rhs.z,
+            z: self.x*rhs.y - self.y*rhs.x,
             _private: () }
     }
 }
