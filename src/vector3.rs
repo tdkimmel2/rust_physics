@@ -1,5 +1,6 @@
 use std::ops::{Add, Sub, Mul, Div};
 
+#[derive(Copy, Clone)]
 pub struct Vector3 {
     pub x: f64,
     pub y: f64,
@@ -81,4 +82,14 @@ impl Vector3 {
             z: self.x*rhs.y - self.y*rhs.x,
             _private: () }
     }
+}
+
+pub fn dot_prod(lhs: Vector3, rhs: Vector3) -> f64 {
+    lhs.x*rhs.x + lhs.y+rhs.y + lhs.z+rhs.z
+}
+pub fn cross_prod(lhs: Vector3, rhs: Vector3) -> Vector3 {
+    Vector3{ x: lhs.y*rhs.z-lhs.z*rhs.y,
+        y: lhs.z*rhs.x - lhs.x*rhs.z,
+        z: lhs.x*rhs.y - lhs.y*rhs.x,
+        _private: () }
 }

@@ -2,6 +2,7 @@ use crate::vector3::Vector3;
 use crate::constants;
 use std::f64::consts::E;
 
+#[derive(Copy, Clone)]
 pub struct Atmosphere {
     pub temperature: f64,
     pub humidity: f64,
@@ -11,9 +12,11 @@ pub struct Atmosphere {
 }
 
 impl Atmosphere {
-    pub fn new(temperature: f64, humidity: f64, elevation: f64, wind: Vector3)
+    pub fn new(temperature: f64, humidity: f64,
+        elevation: f64, wind: Vector3)
         -> Atmosphere {
-        Atmosphere{ temperature, humidity, elevation, wind, _private: () }
+        Atmosphere{ temperature, humidity,
+            elevation, wind, _private: () }
     }
     pub fn saturation_pressure(&self) -> f64 {
         0.61078*E.powf((17.27*(self.temperature-273.15))/(self.temperature-35.85))
