@@ -119,6 +119,7 @@ impl Projectile {
     }
 
 
+    // Quantities in Vacuum
     pub fn apex_vacuum_time(&self) -> f64 {
         let g = -constants::G;
         let t = -self.velocity.z/g;
@@ -157,10 +158,16 @@ impl Projectile {
         (deltax.powi(2) + deltay.powi(2)).sqrt()
     }
 
+    // With Air Resistance
     pub fn air_resistance(&self, atmosphere: Atmosphere) -> f64 {
         let surface_area:f64 = 4.*consts::PI*self.radius.powi(2);
         self.drag_coefficient*atmosphere.air_density()
             *surface_area*self.velocity.mag2()/2.
     }
+    /*
+    pub fn acceleration(&self, atm: Atmosphere) -> Vector3 {
+        let air_density = atm.air_density();
+    }
+    */
 }
 

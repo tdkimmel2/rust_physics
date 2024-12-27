@@ -36,7 +36,7 @@ pub const ARCSEC:f64 = DEGREES/3600.;
 
 // Temperature
 pub const K:f64 = 1.;
-pub const KTOC:f64 = 272.15;
+pub const KTOC:f64 = 273.15;
 
 
 /// Possibly convienient conversion functions

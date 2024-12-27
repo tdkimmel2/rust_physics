@@ -1,5 +1,6 @@
 use crate::vector3::Vector3;
 use crate::constants;
+use crate::units;
 use std::f64::consts::E;
 
 #[derive(Copy, Clone)]
@@ -18,8 +19,9 @@ impl Atmosphere {
         Atmosphere{ temperature, humidity,
             elevation, wind, _private: () }
     }
+
     pub fn saturation_pressure(&self) -> f64 {
-        0.61078*E.powf((17.27*(self.temperature-273.15))/(self.temperature-35.85))
+        0.61078*E.powf((17.27*(self.temperature+units::KTOC-273.15))/(self.temperature+units::KTOC-35.85))
     }
     pub fn vapor_pressure(&self) -> f64 {
         self.humidity*self.saturation_pressure()
