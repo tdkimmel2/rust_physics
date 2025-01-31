@@ -11,7 +11,7 @@ pub const MM:f64 = 1e-3*M;
 pub const UM:f64 = 1e-6*M;
 pub const NM:f64 = 1e-9*M;
 
-pub const MILES:f64 = 1609.344*M;
+pub const MILES:f64 = 1_609.344*M;
 
 // Time
 pub const S:f64 = 1.;
@@ -19,7 +19,7 @@ pub const MS:f64 = 1e-3*S;
 pub const US:f64 = 1e-6*S;
 pub const NS:f64 = 1e-9*S;
 
-pub const H:f64 = 3600.*S;
+pub const H:f64 = 3_600.*S;
 pub const MIN:f64 = 60.*S;
 
 // Mass
@@ -27,7 +27,7 @@ pub const KG:f64 = 1.;
 pub const G:f64 = 1e3*KG;
 pub const MG:f64 = 1e6*KG;
 
-pub const LBS:f64 = 0.4535924*KG;
+pub const LBS:f64 = 0.453_592_4*KG;
 
 // Energy
 pub const J:f64 = KG*pow(M,2.)/pow(S,2);
@@ -36,7 +36,7 @@ pub const J:f64 = KG*pow(M,2.)/pow(S,2);
 pub const RAD:f64 = 1.;
 pub const DEGREES:f64 = 2.*consts::PI*RAD/360.;
 pub const ARCMIN:f64 = DEGREES/60.;
-pub const ARCSEC:f64 = DEGREES/3600.;
+pub const ARCSEC:f64 = DEGREES/3_600.;
 
 // Pressure
 pub const PA:f64 = 1.;
