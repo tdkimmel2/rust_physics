@@ -1,5 +1,5 @@
 pub mod constants;
-pub mod units;
+pub mod si_units;
 pub mod spinors;
 pub mod pauli_matrices;
 pub mod projectiles;
