@@ -7,6 +7,5 @@ edition = "2021"
 
 [dependencies]
 num="0.4.3"
-numpy="0.21.0"
 ndarray="0.16.1"
 libm="0.2.8"

@@ -4,12 +4,12 @@ use crate::si_units as units;
 pub const C:f64 = 299_792_458.*units::M/units::S;
 
 // Gravitational constant on Earth at sea level (m/(s^2))
-pub const G:f64 = 9.80665*units::M/pow(units::S,2.);
+pub const G:f64 = 9.80665*units::M/(units::S*units::S);
 
 // Boltzmann constant (J/K)
 pub const KB:f64 = 1.380_649e-23*units::J/units::K;
 // Avogadro number
-pub const NA:f64 = 6.022_140_76.e23/units::MOL;
+pub const NA:f64 = 6.022_140_76e23/units::MOL;
 
 // Sea level standard atmospheric pressure
 pub const PRESSURE_SEA_LEVEL:f64 = 101_325.*units::PA;

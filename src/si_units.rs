@@ -1,5 +1,4 @@
 use core::f64::consts;
-use crate::constants;
 
 // SI Units are Default
 
@@ -30,7 +29,7 @@ pub const MG:f64 = 1e6*KG;
 pub const LBS:f64 = 0.453_592_4*KG;
 
 // Energy
-pub const J:f64 = KG*pow(M,2.)/pow(S,2);
+pub const J:f64 = KG*M*M/(S*S);
 
 // Angles
 pub const RAD:f64 = 1.;
