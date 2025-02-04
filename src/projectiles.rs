@@ -27,9 +27,9 @@ impl Projectile {
             radius: 0.,
             drag_coefficient: 0.,
             magnus_coefficient: 0.,
-            position: Vector3::new(0.,0.,0.),
-            spin: Vector3::new(0.,0.,0.),
-            velocity: Vector3::new(0.,0.,0.),
+            position: Vector3::new(0., 0., 0.),
+            spin: Vector3::new(0., 0., 0.),
+            velocity: Vector3::new(0., 0., 0.),
             theta: 0.,
             speed: 0.,
             phi: 0.,
@@ -116,8 +116,8 @@ impl Projectile {
     }
 
     pub fn kinetic_energy(&self) -> f64 {
-        let momentum_mag = self.momentum().mag();
-        momentum_mag / (2. * self.mass)
+        let momentum_mag2 = self.momentum().mag2();
+        momentum_mag2 / (2. * self.mass)
     }
 
 
@@ -167,7 +167,7 @@ impl Projectile {
     *******************
     ******************/
     pub fn air_resistance(&self, atm: &Atmosphere, speed: f64) -> f64 {
-        let surface_area:f64 = 4. * consts::PI * self.radius.powi(2);
+        let surface_area: f64 = 4. * consts::PI * self.radius.powi(2);
         self.drag_coefficient * atm.air_density()
             * surface_area * speed.powi(2) / 2.
     }
@@ -184,6 +184,22 @@ impl Projectile {
         let accel_z = (magnus.z - air_res_z) / self.mass - constants::G;
 
         Vector3::new(accel_x, accel_y, accel_z)
+    }
+    pub fn trajectory(&mut self, atm: &Atmosphere) -> Vec<Vector3> {
+        let mut traj: Vec<Vector3> = Vec::new();
+        traj.push(self.position);
+
+        let mut t: f64 = 0.;
+        let t_step = 0.1;
+        while self.position.z > 0. || t < 10. {
+            self.position = self.position + self.velocity * t_step;
+            let accel = self.acceleration(atm);
+            self.set_velocity(self.velocity + accel * t_step);
+            traj.push(self.position);
+            t = t + t_step;
+        }
+
+        traj
     }
 }
 
