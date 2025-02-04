@@ -141,8 +141,9 @@ impl Projectile {
     
         let deltaz = elevation - self.position.z;
         let g = -constants::G;
-        let t = (-self.velocity.z - (self.velocity.z.powi(2) - 2. * deltaz * g).sqrt()) / g;
-        t 
+
+        // Time
+        (-self.velocity.z - (self.velocity.z.powi(2) - 2. * deltaz * g).sqrt()) / g
     }
     pub fn range_vacuum(
         &self, elevation: f64) -> f64 {
@@ -175,7 +176,9 @@ impl Projectile {
         let air_res_y = self.air_resistance(atm, self.velocity.y + atm.wind.y);
         let air_res_z = self.air_resistance(atm, self.velocity.z + atm.wind.z);
 
-        let magnus: Vector3 = Vector3::cross_prod(&self.spin, &self.velocity) * self.magnus_coefficient;
+        let magnus: Vector3 = Vector3::cross_prod(&self.spin, &self.velocity) *
+                                self.magnus_coefficient;
+
         let accel_x = (magnus.x - air_res_x) / self.mass;
         let accel_y = (magnus.y - air_res_y) / self.mass;
         let accel_z = (magnus.z - air_res_z) / self.mass - constants::G;
