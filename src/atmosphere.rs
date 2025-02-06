@@ -2,6 +2,7 @@ use crate::vector3::Vector3;
 use crate::constants;
 use crate::si_units as units;
 use std::f64::consts::E;
+use log::warn;
 
 #[derive(Copy, Clone)]
 pub struct Atmosphere {
@@ -13,9 +14,16 @@ pub struct Atmosphere {
 }
 
 impl Atmosphere {
-    pub fn new(temperature: f64, humidity: f64,
+    pub fn new(temperature: f64, mut humidity: f64,
         elevation: f64, wind: Vector3)
         -> Atmosphere {
+        if humidity > 1. {
+            warn!("Input humidity is greater than 1. Setting to 1.");
+            humidity = 1.0;
+        } else if humidity < 0. {
+            warn!("Input humidity is less than 0. Setting to 0.");
+            humidity = 0.;
+        }
         Atmosphere{ temperature, humidity,
             elevation, wind, _private: () }
     }

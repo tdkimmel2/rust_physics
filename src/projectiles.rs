@@ -39,7 +39,7 @@ impl Projectile {
 
     // Setters
 
-    // Set speed, theta with corresponding velocity
+    // Set speed and angles, updates velocity accordingly
     pub fn set_speed_theta
         (&mut self, speed: f64, theta: f64) {
         let x = speed * tan(theta);
@@ -55,7 +55,7 @@ impl Projectile {
     }
     pub fn set_speed_theta_phi
         (&mut self, speed: f64, theta: f64,
-         phi: f64) {
+            phi: f64) {
         let forward_mag = speed * cos(theta);
         let x = forward_mag * cos(phi);
         let y = forward_mag * sin(phi);
@@ -68,7 +68,7 @@ impl Projectile {
         self.speed = speed;
         self.phi = phi;
     }
-    // Set velocity and corresponding thetas
+    // Set velocity, updates speed and angles accordingly
     pub fn set_velocity_components
         (&mut self, vx: f64, vy: f64, vz: f64) {
         let speed = self.velocity.mag();
@@ -111,13 +111,12 @@ impl Projectile {
         self.velocity
     }
 
-    pub fn momentum(&self) -> Vector3 {
-        self.mass * &self.velocity
-    }
-
     pub fn kinetic_energy(&self) -> f64 {
         let momentum_mag2 = self.momentum().mag2();
         momentum_mag2 / (2. * self.mass)
+    }
+    pub fn momentum(&self) -> Vector3 {
+        self.mass * &self.velocity
     }
 
 
@@ -137,18 +136,18 @@ impl Projectile {
         self.position.z + self.velocity.z * t + g * t.powi(2) / 2.
     }
     pub fn range_vacuum_time(
-        &self, elevation: f64) -> f64 {
+        &self, end_height: f64) -> f64 {
     
-        let deltaz = elevation - self.position.z;
+        let deltaz = self.position.z + end_height;
         let g = -constants::G;
 
         // Time
         (-self.velocity.z - (self.velocity.z.powi(2) - 2. * deltaz * g).sqrt()) / g
     }
     pub fn range_vacuum(
-        &self, elevation: f64) -> f64 {
+        &self, end_height: f64) -> f64 {
 
-        let t = self.range_vacuum_time(elevation);
+        let t = self.range_vacuum_time(end_height);
     
         let final_pos_x = self.position.x + self.velocity.x * t;
         let final_pos_y = self.position.y + self.velocity.y * t;
@@ -158,6 +157,26 @@ impl Projectile {
         let deltax = final_position.x - self.position.x;
         let deltay = final_position.y - self.position.y;
         (deltax.powi(2) + deltay.powi(2)).sqrt()
+    }
+    pub fn trajectory_vaccum(
+        &mut self, end_height: f64) -> Vec<Vector3> {
+        let mut falling: bool = false;
+        let mut traj: Vec<Vector3> = Vec::new();
+        traj.push(self.position);
+        let accel= Vector3::new(0., 0., -constants::G);
+
+        let mut t: f64 = 0.;
+        let t_step = 0.1;
+        while (self.position.z > end_height && falling) || t < 10. {
+            let new_position = self.position + self.velocity * t_step;
+            falling = self.position.z > new_position.z;
+            self.position =  new_position;
+            self.set_velocity(self.velocity + accel * t_step);
+            traj.push(self.position);
+            t = t + t_step;
+        }
+
+        traj
     }
 
 
@@ -185,14 +204,17 @@ impl Projectile {
 
         Vector3::new(accel_x, accel_y, accel_z)
     }
-    pub fn trajectory(&mut self, atm: &Atmosphere) -> Vec<Vector3> {
+    pub fn trajectory(&mut self, atm: &Atmosphere, end_height: f64) -> Vec<Vector3> {
+        let mut falling: bool = false;
         let mut traj: Vec<Vector3> = Vec::new();
         traj.push(self.position);
 
         let mut t: f64 = 0.;
         let t_step = 0.1;
-        while self.position.z > 0. || t < 10. {
-            self.position = self.position + self.velocity * t_step;
+        while (self.position.z > end_height && falling) || t < 10. {
+            let new_position = self.position + self.velocity * t_step;
+            falling = self.position.z > new_position.z;
+            self.position = new_position;
             let accel = self.acceleration(atm);
             self.set_velocity(self.velocity + accel * t_step);
             traj.push(self.position);
