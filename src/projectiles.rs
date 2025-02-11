@@ -159,7 +159,8 @@ impl Projectile {
         (deltax.powi(2) + deltay.powi(2)).sqrt()
     }
     pub fn trajectory_vaccum(
-        &mut self, end_height: f64) -> Vec<Vector3> {
+        &mut self, end_height: f64, max_time: f64) -> Vec<Vector3> {
+
         let mut falling: bool = false;
         let mut traj: Vec<Vector3> = Vec::new();
         traj.push(self.position);
@@ -167,7 +168,7 @@ impl Projectile {
 
         let mut t: f64 = 0.;
         let t_step = 0.1;
-        while (self.position.z > end_height && falling) || t < 10. {
+        while (self.position.z > end_height && falling) || t < max_time {
             let new_position = self.position + self.velocity * t_step;
             falling = self.position.z > new_position.z;
             self.position =  new_position;
@@ -190,7 +191,7 @@ impl Projectile {
         self.drag_coefficient * atm.air_density()
             * surface_area * speed.powi(2) / 2.
     }
-    pub fn acceleration(&self, atm: &Atmosphere) -> Vector3 {
+    pub fn force(&self, atm: &Atmosphere) -> Vector3 {
         let air_res_x = self.air_resistance(atm, self.velocity.x + atm.wind.x);
         let air_res_y = self.air_resistance(atm, self.velocity.y + atm.wind.y);
         let air_res_z = self.air_resistance(atm, self.velocity.z + atm.wind.z);
@@ -198,20 +199,25 @@ impl Projectile {
         let magnus: Vector3 = Vector3::cross_prod(&self.spin, &self.velocity) *
                                 self.magnus_coefficient;
 
-        let accel_x = (magnus.x - air_res_x) / self.mass;
-        let accel_y = (magnus.y - air_res_y) / self.mass;
-        let accel_z = (magnus.z - air_res_z) / self.mass - constants::G;
+        let force_x = magnus.x - air_res_x;
+        let force_y = magnus.y - air_res_y;
+        let force_z = magnus.z - air_res_z - constants::G;
 
-        Vector3::new(accel_x, accel_y, accel_z)
+        Vector3::new(force_x, force_y, force_z)
     }
-    pub fn trajectory(&mut self, atm: &Atmosphere, end_height: f64) -> Vec<Vector3> {
+    pub fn acceleration(&self, atm: &Atmosphere) -> Vector3 {
+        &self.force(atm) / self.mass
+    }
+    pub fn trajectory(
+        &mut self, atm: &Atmosphere, end_height: f64, max_time: f64) -> Vec<Vector3> {
+
         let mut falling: bool = false;
         let mut traj: Vec<Vector3> = Vec::new();
         traj.push(self.position);
 
         let mut t: f64 = 0.;
         let t_step = 0.1;
-        while (self.position.z > end_height && falling) || t < 10. {
+        while (self.position.z > end_height && falling) || t < max_time {
             let new_position = self.position + self.velocity * t_step;
             falling = self.position.z > new_position.z;
             self.position = new_position;

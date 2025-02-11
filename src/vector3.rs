@@ -24,9 +24,9 @@ impl Sub<Vector3> for Vector3 {
 
     fn sub(self, _rhs: Vector3) -> Vector3 {
         Vector3{ x: self.x - _rhs.x,
-        y: self.y - _rhs.y,
-        z: self.z - _rhs.z,
-        _private: () }
+            y: self.y - _rhs.y,
+            z: self.z - _rhs.z,
+            _private: () }
     }
 }
 
@@ -34,7 +34,10 @@ impl Mul<f64> for Vector3 {
     type Output = Vector3;
 
     fn mul(self, _rhs: f64) -> Vector3 {
-        Vector3{ x: self.x * _rhs, y: self.y * _rhs, z: self.z * _rhs, _private: self._private }
+        Vector3{ x: self.x * _rhs,
+            y: self.y * _rhs,
+            z: self.z * _rhs,
+            _private: self._private }
     }
 }
 
@@ -42,7 +45,10 @@ impl Mul<&Vector3> for f64 {
     type Output = Vector3;
 
     fn mul(self, _rhs: &Vector3) -> Vector3 {
-        Vector3{ x: self * _rhs.x, y: self * _rhs.y, z: self * _rhs.z, _private: _rhs._private }
+        Vector3{ x: self * _rhs.x,
+            y: self * _rhs.y,
+            z: self * _rhs.z,
+            _private: _rhs._private }
     }
 }
 
@@ -51,9 +57,20 @@ impl Div<f64> for &Vector3 {
 
     fn div(self, _rhs: f64) -> Vector3 {
         Vector3{ x: self.x / _rhs,
-        y: self.y / _rhs,
-        z: self.z / _rhs,
-        _private: self._private }
+            y: self.y / _rhs,
+            z: self.z / _rhs,
+            _private: self._private }
+    }
+}
+
+impl Div<&Vector3> for f64 {
+    type Output = Vector3;
+
+    fn div(self, _rhs: &Vector3) -> Vector3 {
+        Vector3{ x: self / _rhs.x,
+            y: self / _rhs.y,
+            z: self / _rhs.z,
+            _private: _rhs._private }
     }
 }
 
