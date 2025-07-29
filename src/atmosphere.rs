@@ -28,11 +28,13 @@ impl Atmosphere {
             elevation, wind, _private: () }
     }
 
+
     pub fn pressure(&self) -> f64 {
         let exp_num = -constants::G * constants::AIR_MOL_MASS * self.elevation;
         let exp_denom = constants::R * self.temperature;
         E.powf(exp_num / exp_denom) * constants::PRESSURE_SEA_LEVEL
     }
+
     pub fn saturation_pressure(&self) -> f64 {
         // Tetens Equation, gives pressure in kPa
         // https://en.wikipedia.org/wiki/Tetens_equation
@@ -53,6 +55,7 @@ impl Atmosphere {
             coef1 * E.powf(exp_num / exp_denom) * units::PA / units::KPA
         }
     }
+
     pub fn vapor_pressure(&self) -> f64 {
         self.humidity * self.saturation_pressure()
     }
@@ -60,6 +63,7 @@ impl Atmosphere {
         self.pressure() * constants::AIR_MOLEC_MASS /
             (constants::KB * self.temperature)
     }
+
     pub fn air_density(&self) -> f64 {
         let vapor_pressure = self.vapor_pressure();
         let partial_air_pressure = self.pressure() - vapor_pressure;

@@ -53,6 +53,7 @@ impl Projectile {
         self.speed = speed;
         self.phi = 0.;
     }
+
     pub fn set_speed_theta_phi
         (&mut self, speed: f64, theta: f64,
             phi: f64) {
@@ -68,6 +69,7 @@ impl Projectile {
         self.speed = speed;
         self.phi = phi;
     }
+
     // Set velocity, updates speed and angles accordingly
     pub fn set_velocity_components
         (&mut self, vx: f64, vy: f64, vz: f64) {
@@ -82,6 +84,7 @@ impl Projectile {
         self.theta = atan(vz / xy_mag);
         self.phi = phi;
     }
+
     pub fn set_velocity
         (&mut self, velocity: Vector3) {
         let vx = velocity.x;
@@ -101,12 +104,15 @@ impl Projectile {
     pub fn get_theta(&self) -> f64 {
         self.theta
     }
+
     pub fn get_phi(&self) -> f64 {
         self.phi
     }
+
     pub fn get_speed(&self) -> f64 {
         self.speed
     }
+
     pub fn get_velocity(&self) -> Vector3 {
         self.velocity
     }
@@ -115,6 +121,7 @@ impl Projectile {
         let momentum_mag2 = self.momentum().mag2();
         momentum_mag2 / (2. * self.mass)
     }
+
     pub fn momentum(&self) -> Vector3 {
         self.mass * &self.velocity
     }
@@ -130,11 +137,13 @@ impl Projectile {
         let t = -self.velocity.z / g;
         t
     }
+
     pub fn apex_vacuum(&self) -> f64 {
         let g = -constants::G;
         let t = self.apex_vacuum_time();
         self.position.z + self.velocity.z * t + g * t.powi(2) / 2.
     }
+
     pub fn range_vacuum_time(
         &self, end_height: f64) -> f64 {
     
@@ -144,6 +153,7 @@ impl Projectile {
         // Time
         (-self.velocity.z - (self.velocity.z.powi(2) - 2. * deltaz * g).sqrt()) / g
     }
+
     pub fn range_vacuum(
         &self, end_height: f64) -> f64 {
 
@@ -158,6 +168,7 @@ impl Projectile {
         let deltay = final_position.y - self.position.y;
         (deltax.powi(2) + deltay.powi(2)).sqrt()
     }
+
     pub fn trajectory_vaccum(
         &mut self, end_height: f64, max_time: f64) -> Vec<Vector3> {
 
@@ -191,6 +202,7 @@ impl Projectile {
         self.drag_coefficient * atm.air_density()
             * surface_area * speed.powi(2) / 2.
     }
+
     pub fn force(&self, atm: &Atmosphere) -> Vector3 {
         let air_res_x = self.air_resistance(atm, self.velocity.x + atm.wind.x);
         let air_res_y = self.air_resistance(atm, self.velocity.y + atm.wind.y);
@@ -205,9 +217,11 @@ impl Projectile {
 
         Vector3::new(force_x, force_y, force_z)
     }
+
     pub fn acceleration(&self, atm: &Atmosphere) -> Vector3 {
         &self.force(atm) / self.mass
     }
+
     pub fn trajectory(
         &mut self, atm: &Atmosphere, end_height: f64, max_time: f64) -> Vec<Vector3> {
 

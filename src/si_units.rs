@@ -3,52 +3,53 @@ use core::f64::consts;
 // SI Units are Default
 
 // Length
-pub const M: f64 = 1.;
-pub const KM: f64 = 1e3 * M;
-pub const CM: f64 = 100. * M;
-pub const MM: f64 = 1e-3 * M;
-pub const UM: f64 = 1e-6 * M;
-pub const NM: f64 = 1e-9 * M;
+pub const M:     f64 = 1.;
+pub const KM:    f64 = 1e3 * M;
+pub const CM:    f64 = 100. * M;
+pub const MM:    f64 = 1e-3 * M;
+pub const UM:    f64 = 1e-6 * M;
+pub const NM:    f64 = 1e-9 * M;
 
 pub const MILES: f64 = 1_609.344 * M;
 
 // Time
-pub const S: f64 = 1.;
-pub const MS: f64 = 1e-3 * S;
-pub const US: f64 = 1e-6 * S;
-pub const NS: f64 = 1e-9 * S;
+pub const S:   f64 = 1.;
+pub const MS:  f64 = 1e-3 * S;
+pub const US:  f64 = 1e-6 * S;
+pub const NS:  f64 = 1e-9 * S;
+pub const PS:  f64 = 1e-12 * S;
 
-pub const H: f64 = 3_600. * S;
+pub const HR:  f64 = 3_600. * S;
 pub const MIN: f64 = 60. * S;
 
 // Mass
 pub const KG: f64 = 1.;
-pub const G: f64 = 1e3 * KG;
+pub const G:  f64 = 1e3 * KG;
 pub const MG: f64 = 1e6 * KG;
 
 pub const LB: f64 = 0.453_592_4 * KG;
 
 // Energy
-pub const J: f64 = KG * M * M / (S * S);
-pub const ERG: f64 = 1e-7 * J;
-pub const CAL: f64 = 4.184 * J;
+pub const J:    f64 = KG * M * M / (S * S);
+pub const ERG:  f64 = 1e-7 * J;
+pub const CAL:  f64 = 4.184 * J;
 pub const FTLB: f64 = 1.355_817_948_331_400_4 * J;
 
 // Force
 pub const N: f64 = KG * M / (S * S);
 
 // Pressure
-pub const PA: f64 = J / (M * M * M);
+pub const PA:  f64 = J / (M * M * M);
 pub const KPA: f64 = 1e-3 * PA;
 
 // Angles
-pub const RAD: f64 = 1.;
-pub const DEGREES: f64 = 2. * consts::PI * RAD / 360.;
-pub const ARCMIN: f64 = DEGREES / 60.;
-pub const ARCSEC: f64 = DEGREES / 3_600.;
+pub const RAD:     f64  = 1.;
+pub const DEGREES: f64  = 2. * consts::PI * RAD / 360.;
+pub const ARCMIN:  f64  = DEGREES / 60.;
+pub const ARCSEC:  f64  = DEGREES / 3_600.;
 
 // Temperature
-pub const K: f64 = 1.;
+pub const K:    f64 = 1.;
 pub const KTOC: f64 = 273.15;
 
 // Amount
@@ -69,7 +70,7 @@ pub fn lbs_to_kg(lbs: f64) -> f64 {
 }
 
 pub fn mph_to_mps(mph: f64) -> f64 {
-     mph * MILES / H
+     mph * MILES / HR
 }
 
 // Angles

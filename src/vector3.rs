@@ -90,23 +90,23 @@ impl Vector3 {
         self / self.mag()
     }
 
-    pub fn dot(&self, rhs: Vector3) -> f64 {
-        self.x * rhs.x + self.y * rhs.y + self.z * rhs.z
+    pub fn dot(&self, vec2: Vector3) -> f64 {
+        self.x * vec2.x + self.y * vec2.y + self.z * vec2.z
     }
-    pub fn cross(&self, rhs: Vector3) -> Vector3 {
-        Vector3{ x: self.y * rhs.z - self.z * rhs.y,
-            y: self.z * rhs.x - self.x * rhs.z,
-            z: self.x * rhs.y - self.y * rhs.x,
+    pub fn cross(&self, vec2: Vector3) -> Vector3 {
+        Vector3{ x: self.y * vec2.z - self.z * vec2.y,
+            y: self.z * vec2.x - self.x * vec2.z,
+            z: self.x * vec2.y - self.y * vec2.x,
             _private: () }
     }
 
-    pub fn dot_prod(lhs: Vector3, rhs: Vector3) -> f64 {
-        lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z
+    pub fn dot_prod(vec1: Vector3, vec2: Vector3) -> f64 {
+        vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z
     }
-    pub fn cross_prod(lhs: &Vector3, rhs: &Vector3) -> Vector3 {
-        Vector3{ x: lhs.y * rhs.z - lhs.z * rhs.y,
-            y: lhs.z * rhs.x - lhs.x * rhs.z,
-            z: lhs.x * rhs.y - lhs.y * rhs.x,
+    pub fn cross_prod(vec1: &Vector3, rhs: &Vector3) -> Vector3 {
+        Vector3{ x: vec1.y * rhs.z - vec1.z * rhs.y,
+            y: vec1.z * rhs.x - vec1.x * rhs.z,
+            z: vec1.x * rhs.y - vec1.y * rhs.x,
             _private: () }
     }
 }
